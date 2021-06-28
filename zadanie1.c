@@ -40,15 +40,21 @@ unsigned long casovy_usek(int r1, char l1, char d1, char h1, char m1, char s1, i
 
 	unsigned long sum = 0;
 	int prestup = 0;
-	int r;
+	int R1,R2;
 	
-	r = r1;
-	while(r !=r2){
+	R1=r1; R2=r2;
+
+	if(l1 > 2)
+		R1++;
+	if(l2 < 2)
+		R2--;
 	
-		if((r % 4 == 0 && r % 100 != 0) || (r % 400 == 0))
+	while(R1 <= R2){
+	
+		if((R1 % 4 == 0 && R1 % 100 != 0) || (R1 % 400 == 0))
 			prestup++;
-		
-		r++;	
+	
+		R1++;	
 	}
 
 	
@@ -103,7 +109,7 @@ unsigned long casovy_usek(int r1, char l1, char d1, char h1, char m1, char s1, i
  		l1++;
 		d1 = 1;
 	}
- 	if(d1 == 32 && (l1 == 1 || l1 == 3 || l1 == 5 || l1 == 7 || l1 == 8 || l1 == 10 || l1 == 12)){
+ 	if(d1 == 32){
  		l1++;
 		d1 = 1;
 	}
@@ -134,10 +140,13 @@ unsigned long casovy_usek(int r1, char l1, char d1, char h1, char m1, char s1, i
 		l1++;
 	}
 	while(r1 != r2);
+	
+	if(l2 == 1)
+		sum -= 31*86400;
 				
 	sum += d2*86400;
 	sum += h2*3600 + m2*60 + s2;
-	sum += (prestup+1)*86400;
+	sum += prestup*86400;
 
 	return sum;
 }
@@ -193,6 +202,3 @@ main(){
 	else
 		printf("Pocet sekund = %lu",casovy_usek(r2,l2,d2,h2,m2,s2,r1,l1,d1,h1,m1,s1));
 }
-
-
-
